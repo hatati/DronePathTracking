@@ -21,7 +21,7 @@ def create_training_data():
 
         for img in tqdm(os.listdir(path)): # iterate over each image
             try:
-                img_array = cv2.imread(os.path.join(path,img) ,cv2.IMREAD_GRAYSCALE)  # convert to array
+                img_array = cv2.imread(os.path.join(path,img))  # convert to array
                 new_array = cv2.resize(img_array, (IMG_SIZE, IMG_SIZE))
                 training_data.append([new_array, class_num])
             except Exception as e:
@@ -29,7 +29,7 @@ def create_training_data():
 
 create_training_data()
 
-print(len(training_data))
+print("Number of samples: ", len(training_data))
 
 #Shuffle the data
 random.shuffle(training_data)
@@ -43,19 +43,17 @@ for features, label in training_data:
     X.append(features)
     y.append(label)
 
-print(X[0].reshape(-1, IMG_SIZE, IMG_SIZE, 1))
-
 #X has to be a numpy array while y can stay a list
-#-1: take all features, 1: image is a grayscale (one color channel)
-X = np.array(X).reshape(-1, IMG_SIZE, IMG_SIZE, 1)
+#-1: take all features, 3: image is a RGB image (3 color channels)
+X = np.array(X).reshape(-1, IMG_SIZE, IMG_SIZE, 3)
 
 
 #Save the training data to a pickle file
-pickle_out = open("Dataset/X.pickle","wb")
+pickle_out = open("Dataset/X_RGB.pickle","wb")
 pickle.dump(X, pickle_out)
 pickle_out.close()
 
-pickle_out = open("Dataset/y.pickle","wb")
+pickle_out = open("Dataset/y_RGB.pickle", "wb")
 pickle.dump(y, pickle_out)
 pickle_out.close()
 
